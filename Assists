@@ -1,0 +1,31 @@
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+import time
+
+url = 'https://www.espn.com/soccer/stats/_/league/esp.1'
+wait_time = 7 * 24 * 60 * 60  # wait for 7 days
+
+# create an empty list to store data from all pages
+rows = []
+
+while True:
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, 'html.parser')
+    table = soup.find_all('table')[1]
+    columns = [th.text.strip() for th in table.find_all('th')]
+
+    # Extracting rows
+    for tr in table.tbody.find_all('tr'):
+        rows.append([td.text.strip() for td in tr.find_all('td')])
+
+    # Create a pandas DataFrame
+    df = pd.DataFrame(rows, columns=columns)
+    df.index += 1
+
+    # Save the DataFrame to a CSV file
+    df.to_csv('assists.csv', index_label='Rank')
+
+    time_wait = 7 * 24 * 60 * 60 # 7 days in seconds
+    print(f"Printing results for next fixture in {time_wait/24/60/60} days")
+    time.sleep(time_wait)

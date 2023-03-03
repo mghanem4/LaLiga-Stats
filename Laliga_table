@@ -1,0 +1,27 @@
+import requests
+from bs4 import BeautifulSoup
+import csv
+import time
+
+def find_league():
+    url = "https://www.skysports.com/la-liga-table"
+    r = requests.get(url)
+    soup = BeautifulSoup(r.text, 'html.parser')
+    league_table = soup.find('table', class_="standing-table__table")
+
+    with open('output.csv', 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(['Rank', 'Team', 'Played', 'Won', 'Drawn', 'Lost', 'For', 'Against', 'GD', 'Points'])
+        for index, team in enumerate(league_table.tbody.find_all('tr')):
+            data = [cell.text.strip() for cell in team.find_all('td')]
+            team_name = data[1].ljust(25)
+            writer.writerow([data[0], team_name, data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9]])
+            
+if __name__=='__main__':
+    while True:
+        find_league()
+        #7 days in seconds
+        time_wait=7 * 24 * 60 * 60 
+        
+        print(f"Printing results for next fixture in {time_wait/24/60/60} days")
+        time.sleep(time_wait)
