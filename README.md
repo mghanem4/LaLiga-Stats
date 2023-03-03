@@ -19,3 +19,6 @@ The next step is to analyze the data to see how it could benefit each team or th
 
 1.5 Applying Machine Learning models:
 Linear regression could be used to predict future goals per minute for each team/player This step is used to further improve the program, predective models could be used to forecast future events
+
+
+Tableau link for Data viz: https://public.tableau.com/app/profile/mohamadghanem/viz/LaLiga_16778192467360/LaLiga?publish=yes 
